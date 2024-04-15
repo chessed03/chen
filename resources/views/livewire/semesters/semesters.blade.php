@@ -41,6 +41,7 @@
                                 :is-searchable="false"
                                 :list-items="$list_degrees"
                                 wire-model="selected_degree_id"
+                                :is-disabled="false"
                                 :is-change="false"
                                 :is-key="false"
                             />
@@ -54,6 +55,7 @@
                                 :is-searchable="false"
                                 :list-items="$list_groups"
                                 wire-model="selected_group_id"
+                                :is-disabled="false"
                                 :is-change="false"
                                 :is-key="false"
                             />
@@ -67,7 +69,7 @@
                 <div class="col-md-3 button-list py-3 text-right" 
                     x-show="openBarFilters"
                     x-transition.scale.origin.top
-                    >
+                >
 
                     <x-button-clear-filters 
                         :disabled="!$selected_degree_id && !$selected_group_id"
@@ -86,6 +88,7 @@
                 @foreach ($listModule as $key => $item)
 
                     <tr>
+                        <td>{{ $item->name }}</td>
                         <td>
                             {{ $item->degree->name }}
                         </td>
@@ -93,7 +96,6 @@
                             {{ $item->group->name }}
                         </td>
                         <td class="text-center">{{ $item->shift->name }}</td>
-                        <td>{{ $item->career->name }}</td>
                         <td class="text-center">
                             
                             <x-status-item :is-active="$item->is_active" />

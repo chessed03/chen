@@ -16,7 +16,9 @@
                 :is-searchable="false"
                 :list-items="$list_degrees"
                 wire-model="degree_id"
-                :is-change="false"
+                :is-disabled="false"
+                :is-change="true"
+                wire-change="degreeSelected(true)"
                 :is-key="false"
             />
         </div>
@@ -27,28 +29,29 @@
                 :is-searchable="false"
                 :list-items="$list_groups"
                 wire-model="group_id"
-                :is-change="false"
-                :is-key="false"
-            />
-        </div>
-        
-        <div class="col-md-4">
-            <x-select 
-                label-component="Turno *"
-                :is-searchable="false"
-                :list-items="$list_shifts"
-                wire-model="shift_id"
+                :is-disabled="false"
                 :is-change="true"
-                wire-change="shitfSelected(true)"
+                wire-change="generateName()"
                 :is-key="false"
             />
         </div>
 
-        <div class="col-md-{{ $update_mode ? '9' : '12' }}">
-            <x-select-dynamic 
-                label-component="Carrera *"
+        <div class="col-md-4">
+            <x-input-form 
+                label-component="Nombre del semestre"
+                input-type="text"
+                wire-model="name"
+                :readonly="true"
+                :disabled="false"
+            />
+        </div>
+
+        <div class="col-md-8">
+            <x-multiselect-dynamic 
+                label-component="Carreras *"
                 :is-searchable="false"
-                wire-model="career_id"
+                wire-model="careers"
+                :is-disabled="$careers_disabled"
                 :is-change="false"
                 :is-key="false"
             />

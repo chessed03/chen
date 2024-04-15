@@ -23,7 +23,9 @@ class Semesters extends Component
 
     public $action_loader, $headers_table, $modal_title,  $modal_warnings, $modal_target, $key_word, $selected_degree_id, $selected_group_id, $selected_id, $update_mode;
 
-    public $degree_id, $group_id, $career_id, $name, $is_active, $list_degrees, $list_groups, $list_shifts, $listCareers;
+    public $degree_id, $group_id, $name, $is_active, $list_degrees, $list_groups, $list_shifts;
+
+    public $careers_disabled    = true;
 
     public function mount()
     {
@@ -31,23 +33,23 @@ class Semesters extends Component
         $this->action_loader    = "paginate_number, order_by, key_word, selected_degree_id, selected_group_id, clearFilters";
 
         $this->headers_table    = [
+            (object)['name' => 'Nombre del semestre', 'class' => '', 'width' => '40%'],
             (object)['name' => 'Grado', 'class' => '', 'width' => '10%'],
             (object)['name' => 'Grupo', 'class' => 'text-center', 'width' => '10%'],
             (object)['name' => 'Turno', 'class' => 'text-center', 'width' => '15%'],
-            (object)['name' => 'Carrera', 'class' => '', 'width' => '40%'],
             (object)['name' => 'Estado', 'class' => 'text-center', 'width' => '10%'],
             (object)['name' => 'Acciones', 'class' => 'text-right', 'width' => '15%']
         ];
 
         $this->modal_warnings   = [
-            'Revise sus datos antes de crear un nuevo semestre.',
+            'Revise sus datos antes de crear un nuevo semestre',
             'Los campos marcados con (*) son obligatorios',
-            'Cada semestre creado es único.'
+            'Cada semestre creado es único',
+            'El nombre del semestre se genera en automático',
         ];
 
-        $this->list_degrees   = Semester::getDegrees();
-
-        $this->list_groups    = Semester::getGroups();
+        $this->list_degrees     = Semester::getDegrees();
+        $this->list_groups      = Semester::getGroups();
 
     }
 
@@ -55,10 +57,10 @@ class Semesters extends Component
     {
     
         $rules = [
-            'degree_id'     => 'required',
-            'group_id'      => 'required',
-            'career_id'     => 'required',
-            'name'          => 'required'
+            'degree_id' => 'required',
+            'group_id'  => 'required',
+            'careers'   => 'required',
+            'name'      => 'required'
         ];
 
         if ($this->update_mode) {
@@ -80,15 +82,13 @@ class Semesters extends Component
         $this->selected_id  = null;
         $this->degree_id    = null;
         $this->group_id     = null;
-        $this->career_id    = null;
+        $this->caeers       = null;
         $this->name         = null;
         $this->is_active    = null;
         $this->update_mode  = false;
-        $this->listCareers  = [];
 
         $this->dsSelectSelected('degree_id', null);
         $this->dsSelectSelected('group_id', null);
-        $this->dsSelectSelected('career_id', null);
         $this->dsSelectSelected('is_active', null);
         $this->resetErrorBag();
         $this->resetValidation();
@@ -129,13 +129,12 @@ class Semesters extends Component
         
         $this->degree_id    = $item->degree_id;
         $this->group_id     = $item->group_id;
-        $this->career_id    = $item->career_id;
+        $this->careers      = $item->careers;
         $this->name         = $item->name;
         $this->is_active    = $item->is_active;
 
         $this->dsSelectSelected('degree_id', $item->degree_id);
         $this->dsSelectSelected('group_id', $item->group_id);
-        $this->dsSelectSelected('career_id', $item->career_id);
         $this->dsSelectSelected('is_active', $item->is_active);
 
     }
@@ -216,6 +215,25 @@ class Semesters extends Component
 
     }
 
+    public function degreeSelected($status)
+    {
+        $degree             = $this->list_degrees->find($this->degree_id);
+        $list_careers       = Semester::getCareersByShiftId($degree->shift_id);
+        $this->dsSelectOptions('careers', $list_careers);
+        $this->generateName();
+    }
+
+    public function generateName()
+    {
+
+        $degree         = $this->list_degrees->find($this->degree_id);
+        $group          = $this->list_groups->find($this->group_id); 
+        $degree_name    = $degree ? $degree->name : '';
+        $group_name     = $group ? $group->name : '';
+        $this->name     = "{$degree_name}{$group_name}";
+   
+    }
+
     public function clearFilters()
     {   
 
@@ -235,7 +253,11 @@ class Semesters extends Component
 
         $order_by           = intval($this->order_by);
 
-        $listModule         = Semester::getSelfItems($key_word, $paginate_number, $order_by);
+        $degree_id          = $this->selected_degree_id;
+
+        $group_id           = $this->selected_group_id;
+
+        $listModule         = Semester::getSelfItems($key_word, $paginate_number, $order_by, $degree_id, $group_id);
         
         $this->setPage(1);
 

@@ -15,6 +15,10 @@ class Semester extends Model
 
     protected $table = 'semesters';
 
+    protected $casts = [
+        'careers' => 'json',
+    ];
+
     const ENABLED    = 1;
 
     const DISABLED   = 2;
@@ -34,28 +38,23 @@ class Semester extends Model
         return $this->belongsTo(Career::class);
     }
 
-    public static function getSelfItems($key_word, $paginate_number, $order_by)
+    public static function getSelfItems($key_word, $paginate_number, $order_by, $degree_id, $group_id)
     {
 
         $query = self::query()
-            ->where('is_active', self::ENABLED);
-            // ->where(function ($query) use ($key_word) {
-            //     $query->where('degree_id', 'LIKE', '%' . $key_word . '%')
-            //         ->orWhereHas('degree', function ($query) use ($key_word) {
-            //             $query->where('name', 'LIKE', '%' . $key_word . '%');
-            //         })
-            //         ->orWhereHas('group', function ($query) use ($key_word) {
-            //             $query->where('name', 'LIKE', '%' . $key_word . '%');
-            //         })
-            //         ->orWhereHas('shift', function ($query) use ($key_word) {
-            //             $query->where('name', 'LIKE', '%' . $key_word . '%');
-            //         })
-            //         ->orWhereHas('career', function ($query) use ($key_word) {
-            //             $query->where('name', 'LIKE', '%' . $key_word . '%');
-            //         });
-            // });
-        
-       
+            ->where('is_active', self::ENABLED);      
+
+        if ($degree_id) {
+
+            $query->where('degree_id', $degree_id);
+
+        }
+
+        if ($group_id) {
+
+            $query->where('group_id', $group_id);
+
+        }
 
         switch ($order_by) {
             case 1:
@@ -140,8 +139,8 @@ class Semester extends Model
         $item               = new self();
         $item->degree_id    = $data->degree_id;
         $item->group_id     = $data->group_id;
-        $item->shift_id     = $data->shift_id;
         $item->career_id    = $data->career_id;
+        $item->name         = $data->name;
         $item->is_active    = self::ENABLED;
 
         if($item->save()) {
@@ -177,8 +176,8 @@ class Semester extends Model
 
             $item->degree_id    = $data->degree_id;
             $item->group_id     = $data->group_id;
-            $item->shift_id     = $data->shift_id;
             $item->career_id    = $data->career_id;
+            $item->name         = $data->name;
             $item->is_active    = $data->is_active;
 
             if($item->update()) {
@@ -252,22 +251,6 @@ class Semester extends Model
         return false;
     }
 
-    // public static function validateItemRelations($item, $result) 
-    // {
-
-    //     $validateInSubjects  = Subject::validateExistSemester($item->id);
-            
-    //     if ($validateInSubjects) {
-
-    //         $result->bound  = true;
-    //         $result->find   = 'Registro vinculado a un <strong>Semestre<strong>.';
-
-    //     }
-
-    //     return $result;
-
-    // }
-
     public static function validateExistDegree($degree_id)
     {
         $result = false;
@@ -306,10 +289,11 @@ class Semester extends Model
 
     public static function validateExistCareer($career_id)
     {
+        
         $result = false;
 
         $query = self::query()
-            ->where('career_id', $career_id)
+            ->whereJsonContains('careers', $career_id)
             ->where('is_active', self::ENABLED)
             ->exists();
             
@@ -320,6 +304,7 @@ class Semester extends Model
         }
             
         return $result;
+        
     }
 
     public static function validateExistShift($shift_id)
@@ -353,14 +338,7 @@ class Semester extends Model
         return Group::getItems();
 
     }
-
-    public static function getShifts()
-    {
-
-        return Shift::getItems();
-
-    }
-
+    
     public static function getCareersByShiftId($shift_id)
     {
        

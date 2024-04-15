@@ -116,6 +116,12 @@ const selectOptions = (e) => {
     let selectTarget    = $('#' + e.target);
     let listItems       = e.content;
     let options         = ``;
+
+    // if ( listItems.length > 0) {
+
+    //     selectTarget.removeAttr('disabled');
+
+    // } //reivisar 14/04/2024 se modificó
     
     listItems.forEach( item => {
         
@@ -123,25 +129,9 @@ const selectOptions = (e) => {
 
     });
 
+
     selectTarget.html(options);
 
     selectRefresh(selectTarget);
 
 }
-
-// $wire.on('modalMessage', (e) => {
-                
-//     Swal.fire({
-//         type             : e.type,
-//         title            : e.title,
-//         html             : `<b>${e.text}</b>`,
-//         buttonsStyling   : false,
-//         showCancelButton : false,
-//         showConfirmButton: true,
-//         customClass      : {
-//             confirmButton : 'btn btn-dark waves-effect waves-light float-right',
-//         },
-//         confirmButtonText: '<i class="fe-check-circle mr-1"></i> Aceptar',
-//     });
-    
-// });
