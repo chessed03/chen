@@ -44,6 +44,7 @@ class Degrees extends Component
             'El campo nombre se genera en automático al seleccionar [ "Referencia", "Turno"]',
             'El periodo [ 1 ], pertencen las referencias [1, 3, 5]',
             'El periodo [ 2 ], pertencen las referencias [2, 4, 6]',
+            'El nombre del grado se genera en automático',
         ];
 
         $this->list_degree_references   = Degree::getDegreeReferences();

@@ -27,6 +27,7 @@
                 :is-searchable="false"
                 :list-items="$list_priorities"
                 wire-model="priority_id"
+                :is-disabled="false"
                 :is-change="false"
                 :is-key="false"
             />

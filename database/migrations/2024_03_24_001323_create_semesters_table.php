@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('degree_id')->constrained('degrees');
             $table->foreignId('group_id')->constrained('groups');
-            $table->foreignId('career_id')->constrained('careers');
+            $table->json('careers');
             $table->string('name');
             $table->boolean('is_active');
             $table->timestamps();

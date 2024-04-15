@@ -27,6 +27,7 @@
                 :is-searchable="false"
                 :list-items="$list_shifts"
                 wire-model="shifts"
+                :is-disabled="false"
                 :is-change="false"
                 :is-key="false"
             />

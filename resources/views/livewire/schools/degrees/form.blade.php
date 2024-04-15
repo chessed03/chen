@@ -17,6 +17,7 @@
                 :is-searchable="false"
                 :list-items="$list_degree_references"
                 wire-model="degree_reference_id"
+                :is-disabled="false"
                 :is-change="true"
                 wire-change="generateName()"
                 :is-key="false"
@@ -29,6 +30,7 @@
                 :is-searchable="false"
                 :list-items="$list_shifts"
                 wire-model="shift_id"
+                :is-disabled="false"
                 :is-change="true"
                 wire-change="generateName()"
                 :is-key="false"
@@ -37,7 +39,7 @@
 
         <div class="col-md-6">
             <x-input-form 
-                label-component="Nombre del grado *"
+                label-component="Nombre del grado"
                 input-type="text"
                 wire-model="name"
                 :readonly="true"

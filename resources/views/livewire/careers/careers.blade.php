@@ -19,6 +19,7 @@
                         :is-searchable="false"
                         :list-items="$list_shifts"
                         wire-model="selected_shift_id"
+                        :is-disabled="false"
                         :is-change="false"
                         :is-key="false"
                     />

@@ -216,7 +216,7 @@ class Career extends Model
         if ($validateInSubjects) {
 
             $result->bound  = true;
-            $result->find   = 'Registro vinculado en una <strong>Carrera<strong>.';
+            $result->find   = 'Registro vinculado en una <strong>Materia<strong>.';
 
         }
 

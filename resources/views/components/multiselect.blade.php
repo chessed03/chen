@@ -2,6 +2,7 @@
     <label for="{{ $wireModel }}" class="control-label">{{ $labelComponent }}</label>
     <div wire:ignore>
         <select
+            @disabled($isDisabled)
             class="selectpicker mb-1"
             data-live-search="{{ $isSearchable }}"
             multiple
@@ -33,6 +34,7 @@
             :is-searchable="true"
             :list-items="$listShifts"
             wire-model="shifts"
+            :is-disabled="false"
             :is-change="true"
             wire-change="shitfSelected(true)"
             :is-key="false"

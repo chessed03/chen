@@ -18,6 +18,7 @@
                         label-component="Turno"
                         :is-searchable="false"
                         :list-items="$list_shifts"
+                        :is-disabled="false"
                         wire-model="selected_shift_id"
                         :is-change="false"
                         :is-key="false"

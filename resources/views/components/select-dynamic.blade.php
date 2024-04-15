@@ -1,7 +1,8 @@
 <div class="form-group">
     <label for="{{ $wireModel }}" class="control-label">{{ $labelComponent }}</label>
     <div wire:ignore>
-        <select 
+        <select
+            @disabled($isDisabled) 
             class="selectpicker mb-1"
             data-live-search="{{ $isSearchable }}"
             data-style="btn-light"
@@ -26,8 +27,8 @@
         <x-select-dynamic 
             label-component="Turnos *"
             :is-searchable="true"
-            :list-items="$listShifts"
             wire-model="shifts"
+            :is-disabled="false"
             :is-change="true"
             wire-change="shitfSelected(true)"
             :is-key="false"

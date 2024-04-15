@@ -26,6 +26,7 @@
                 label-component="Tipo de puesto *"
                 :is-searchable="false"
                 :list-items="$list_is_teachers"
+                :is-disabled="false"
                 wire-model="is_teacher"
                 :is-change="false"
                 :is-key="false"
