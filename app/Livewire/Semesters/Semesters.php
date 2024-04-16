@@ -23,9 +23,7 @@ class Semesters extends Component
 
     public $action_loader, $headers_table, $modal_title,  $modal_warnings, $modal_target, $key_word, $selected_degree_id, $selected_group_id, $selected_id, $update_mode;
 
-    public $degree_id, $group_id, $name, $is_active, $list_degrees, $list_groups, $list_shifts;
-
-    public $careers_disabled    = true;
+    public $degree_id, $group_id, $careers, $name, $is_active, $list_degrees, $list_groups, $list_shifts;
 
     public function mount()
     {
