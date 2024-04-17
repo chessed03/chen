@@ -85,9 +85,11 @@ class Semesters extends Component
         $this->is_active    = null;
         $this->update_mode  = false;
 
+        $this->dsSelectSelectedDynamic('careers', null);
         $this->dsSelectSelected('degree_id', null);
         $this->dsSelectSelected('group_id', null);
         $this->dsSelectSelected('is_active', null);
+
         $this->resetErrorBag();
         $this->resetValidation();
 
@@ -215,10 +217,12 @@ class Semesters extends Component
 
     public function degreeSelected($status)
     {
+        
         $degree             = $this->list_degrees->find($this->degree_id);
         $list_careers       = Semester::getCareersByShiftId($degree->shift_id);
-        $this->dsSelectOptions('careers', $list_careers);
+        $this->dsSelectOptionsDynamic('careers', $list_careers);
         $this->generateName();
+
     }
 
     public function generateName()

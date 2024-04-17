@@ -130,6 +130,26 @@ trait DispatchServices
 
     }
 
+    public function dsSelectOptionsDynamic($target, $content)
+    {
+      
+        $this->eventDispatch('selectOptionsDynamic', $target, $content);
+
+    }
+
+    public function dsSelectSelectedDynamic($target, $content)
+    {
+
+        if (!is_array($content)) {
+            
+            $content = [];
+
+        }
+
+        $this->eventDispatch('selectSelectedDynamic', $target, $content);
+
+    }
+
     public function eventDispatch($function, $target, $content)
     {
 

@@ -116,12 +116,6 @@ const selectOptions = (e) => {
     let selectTarget    = $('#' + e.target);
     let listItems       = e.content;
     let options         = ``;
-
-    // if ( listItems.length > 0) {
-
-    //     selectTarget.removeAttr('disabled');
-
-    // } //reivisar 14/04/2024 se modificó
     
     listItems.forEach( item => {
         
@@ -130,6 +124,49 @@ const selectOptions = (e) => {
     });
 
 
+    selectTarget.html(options);
+
+    selectRefresh(selectTarget);
+
+}
+
+const selectSelectedDynamic = (e) => {
+
+    let selectTarget    = $('#' + e.target);
+    let optionsSelected = e.content;
+    
+    if (optionsSelected.length != 0) {
+
+        optionsSelected.forEach( val => {
+            
+            selectTarget.find(`option[value="${ val }"]`).prop('selected', true);
+    
+        });
+        
+
+    } else {
+
+        selectTarget.val('');
+
+        selectOptionsDynamic(e);
+    }
+    
+    selectRefresh(selectTarget);
+
+}
+
+const selectOptionsDynamic = (e) => {
+
+    let selectTarget    = $('#' + e.target);
+    let listItems       = e.content;
+    let options         = ``;
+    
+    listItems.forEach( item => {
+       
+        options += `<option value="${ item.id }">${ item.name }</option>`;
+
+    });
+    
     selectTarget.html(options);
 
     selectRefresh(selectTarget);

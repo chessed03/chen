@@ -51,7 +51,7 @@
                 label-component="Carreras *"
                 :is-searchable="false"
                 wire-model="careers"
-                :is-disabled="true"
+                :is-disabled="false"
                 :is-change="false"
                 :is-key="false"
             />
