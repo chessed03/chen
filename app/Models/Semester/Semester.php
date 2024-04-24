@@ -139,7 +139,7 @@ class Semester extends Model
         $item               = new self();
         $item->degree_id    = $data->degree_id;
         $item->group_id     = $data->group_id;
-        $item->career_id    = $data->career_id;
+        $item->careers      = $data->careers;
         $item->name         = $data->name;
         $item->is_active    = self::ENABLED;
 
@@ -228,10 +228,7 @@ class Semester extends Model
     public static function validateUniqueItem($data)
     {
         $query = self::query()
-            ->where('degree_id', $data->degree_id)
-            ->where('group_id', $data->group_id)
-            ->where('shift_id', $data->shift_id)
-            ->where('career_id', $data->career_id)
+            ->where('name', $data->name)
             ->where('is_active', self::ENABLED);
         
         if ($data->update_mode) {

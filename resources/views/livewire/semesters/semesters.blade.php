@@ -89,13 +89,10 @@
 
                     <tr>
                         <td>{{ $item->name }}</td>
-                        <td>
-                            {{ $item->degree->name }}
-                        </td>
+                        <td>{{ $item->degree->name }}</td>
                         <td class="text-center">
                             {{ $item->group->name }}
                         </td>
-                        <td class="text-center">{{ $item->shift->name }}</td>
                         <td class="text-center">
                             
                             <x-status-item :is-active="$item->is_active" />

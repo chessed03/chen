@@ -32,10 +32,9 @@ class Semesters extends Component
 
         $this->headers_table    = [
             (object)['name' => 'Nombre del semestre', 'class' => '', 'width' => '40%'],
-            (object)['name' => 'Grado', 'class' => '', 'width' => '10%'],
-            (object)['name' => 'Grupo', 'class' => 'text-center', 'width' => '10%'],
-            (object)['name' => 'Turno', 'class' => 'text-center', 'width' => '15%'],
-            (object)['name' => 'Estado', 'class' => 'text-center', 'width' => '10%'],
+            (object)['name' => 'Grado', 'class' => '', 'width' => '15%'],
+            (object)['name' => 'Grupo', 'class' => 'text-center', 'width' => '15%'],
+            (object)['name' => 'Estado', 'class' => 'text-center', 'width' => '15%'],
             (object)['name' => 'Acciones', 'class' => 'text-right', 'width' => '15%']
         ];
 
@@ -80,7 +79,7 @@ class Semesters extends Component
         $this->selected_id  = null;
         $this->degree_id    = null;
         $this->group_id     = null;
-        $this->caeers       = null;
+        $this->careers      = null;
         $this->name         = null;
         $this->is_active    = null;
         $this->update_mode  = false;
@@ -147,7 +146,7 @@ class Semesters extends Component
             'selected_id'   => $this->selected_id,
             'degree_id'     => $this->degree_id,
             'group_id'      => $this->group_id,
-            'career_id'     => $this->career_id,
+            'careers'       => $this->careers,
             'name'          => $this->name,
             'is_active'     => $this->is_active,
             'update_mode'   => $this->update_mode
