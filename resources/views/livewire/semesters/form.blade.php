@@ -13,7 +13,7 @@
         <div class="col-md-4">
             <x-select 
                 label-component="Grado *"
-                :is-searchable="false"
+                :is-searchable="true"
                 :list-items="$list_degrees"
                 wire-model="degree_id"
                 :is-disabled="false"
