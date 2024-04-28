@@ -18,7 +18,7 @@
 
                     <button
                         type="button"
-                        x-on:click="openBarFilters = ! openBarFilters"
+                        x-on:click="openBarFilters =! openBarFilters"
                         x-bind:class="{'btn-success': !openBarFilters, 'btn-danger': openBarFilters}"
                         class="btn waves-effect waves-light float-right"
                     >
