@@ -160,7 +160,7 @@ const selectOptionsDynamic = (e) => {
     let selectTarget    = $('#' + e.target);
     let listItems       = e.content;
     let options         = ``;
-    
+    console.log('here');
     listItems.forEach( item => {
        
         options += `<option value="${ item.id }">${ item.name }</option>`;

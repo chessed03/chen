@@ -152,31 +152,29 @@ class Semester extends Model
         return $result;
 
     }
-    /**
-     * validar con maestros si estan en un semestre ejemplo 1ro D
-     */
+    
     public static function updateItem($data, $result)
     {
 
         $item       = self::find($data->selected_id);
         $boundItem  = false;
 
-        // if ($data->is_active == self::DISABLED) {
+        if ($data->is_active == self::DISABLED) {
  
-        //     $validateItemRelations  = self::validateItemRelations($item, $result);
-        //     $boundItem              = $validateItemRelations->bound;
+            $validateItemRelations  = self::validateItemRelations($item, $result);
+            $boundItem              = $validateItemRelations->bound;
 
-        // }
+        }
 
-        // if ($boundItem) {
+        if ($boundItem) {
 
-        //     $result->find   = $validateItemRelations->find;
+            $result->find   = $validateItemRelations->find;
 
-        // } else {
+        } else {
 
             $item->degree_id    = $data->degree_id;
             $item->group_id     = $data->group_id;
-            $item->career_id    = $data->career_id;
+            $item->careers      = $data->careers;
             $item->name         = $data->name;
             $item->is_active    = $data->is_active;
 
@@ -186,7 +184,7 @@ class Semester extends Model
 
             }
 
-        // }
+        }
 
         return $result;
 
@@ -203,13 +201,13 @@ class Semester extends Model
             'find'  => ''
         ];
 
-        // $validateItemRelations  = self::validateItemRelations($item, $result);
+        $validateItemRelations  = self::validateItemRelations($item, $result);
 
-        // if ($validateItemRelations->bound) {
+        if ($validateItemRelations->bound) {
 
-            // $result->find   = $validateItemRelations->find;
+        $result->find   = $validateItemRelations->find;
 
-        // } else {
+        } else {
             
             $item->is_active    = self::DISABLED; 
             
@@ -219,7 +217,7 @@ class Semester extends Model
 
             }
 
-        // }
+        }
         
         return $result;
 
@@ -246,6 +244,18 @@ class Semester extends Model
         }
 
         return false;
+    }
+
+    public static function validateItemRelations($item, $result)
+    {
+
+        //**? De momento en ninguna de las tablas precisa un semester_id
+        //**? en cuanto se cree alguna con la relacion con este modelo y
+        //**? respectiva llaves FK's, hacer la validación o validaciones 
+        //**! Retornamos el valor de $result (valoderes por default)
+
+        return $result;
+
     }
 
     public static function validateExistDegree($degree_id)
