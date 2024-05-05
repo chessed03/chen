@@ -25,7 +25,7 @@ class Subjects extends Component
 
     public $action_loader, $headers_table, $modal_title,  $modal_warnings, $modal_target, $key_word, $selected_id, $update_mode;
 
-    public $name, $is_active, $list_degrees, $list_careers;
+    public $subject_type_id, $degree_reference_id, $career_id, $name, $is_active, $list_degree_references, $list_subject_type, $list_careers;
 
     public function mount()
     {
@@ -42,158 +42,30 @@ class Subjects extends Component
         $this->modal_warnings   = [
             'Los campos marcados con (*) son obligatorios',
         ]; 
+
+        $this->list_subject_type        = ___getSubjectTypes__();
         
-        $this->list_degrees   = Subject::getDegrees();
+        $this->list_degree_references   = Subject::getDegreeReference();
 
-        $this->list_careers   = Subject::getCareers();
-
-    }
-
-    public function prepareCourses($degree_id, $career_id)
-    {
-            
-        $this->courses[] = (object)[
-            'degree_id' => $degree_id,
-            'career_id' => $career_id,
-        ];
-
-        $this->dsInitSelect();
-
-    }
-
-    public function addRow($index)
-    {
-        $this->resetValidation();
-
-        $degreeId = $this->courses[$index]->degree_id;
-        $careerId = $this->courses[$index]->career_id;
-        $result = (object)[
-            'type' => true,
-            'error' => 0,
-        ];
-
-        if ($degreeId == "") {
-
-            $result->type   = false;
-            $result->error  = 1;
-            
-        }
-        if ($careerId == "") {
-            
-            $result->type   = false;
-            $result->error  = 2;
-
-        }
-
-        if ($degreeId != "" && $careerId != "") {
-
-            foreach ($this->courses as $key => $row) {
-
-                if ($key != $index) {
-
-                    if ($row->degree_id == $degreeId && $row->career_id == $careerId) {
-                    
-                        $result->type   = false;
-                        $result->error  = 3;
-                        break;
-
-                    }
-
-                }
-
-            }
-
-        }
-
-        if ($result->type) {
-            
-            $this->prepareCourses(null, null);
-
-        } else {
-            
-            switch ($result->error) {
-
-                case 1:
-
-                    $this->addError("courses.{$index}.degree_id", 'El grado no debe estar vacío.');
-                    break;
-
-                case 2:
-
-                    $this->addError("courses.{$index}.career_id", 'La carrera no debe estar vacía.');
-                    break;
-
-                case 3:
-
-                    $this->addError("courses.{$index}.career_id", 'Ya existe un registro con los datos ingresados.');
-                    break;
-
-                case 4:
-
-                    $this->addError("courses.{$index}.degree_id", 'Los campos no deben estar vacíos.');
-                    $this->addError("courses.{$index}.career_id", 'Los campos no deben estar vacíos.');
-                    break;
-
-            }
-
-        }
-    }
-
-
-    public function deleteRow($index)
-    {
-        
-        $this->resetValidation();
-
-        unset($this->courses[$index]);
-
-    }
-
-    public function validateData()
-    {
-    
-        $rules = [
-            'name'  => 'required',
-        ];
-
-        foreach ($this->courses as $key => $course) {
-            
-            if ($course->degree_id == '') {
-
-                $rules["courses.{$key}.degree_id"]  = 'required';
-
-            }
-
-            if ($course->career_id == '') {
-
-                $rules["courses.{$key}.career_id"]  = 'required';
-
-            }
-        }
-
-        if ($this->update_mode) {
-
-            $rules['is_active'] = 'required';
-
-        }
-
-        $messages = [
-            'required'  => 'El campo es requerido.',
-        ];
-    
-        $this->validate($rules, $messages);    
+        $this->list_careers             = Subject::getCareers();
 
     }
 
     private function resetFieldsAndHydrate()
     {
         
-        $this->selected_id  = null;
-        $this->name         = null;
-        $this->courses      = [];
-        $this->is_active    = null;
-        $this->update_mode  = false;
+        $this->selected_id          = null;
+        $this->subject_type_id      = null;
+        $this->degree_reference_id  = null;
+        $this->career_id            = null;
+        $this->name                 = null;
+        $this->is_active            = null;
+        $this->update_mode          = false;
 
+        $this->generateSelectOrMultiselect(true, true, 'career_id', null);
+        $this->dsSelectSelected('subject_type_id', null);
+        $this->dsSelectSelected('degree_reference_id', null);
+        $this->dsSelectSelected('career_id', null);
         $this->dsSelectSelected('is_active', null);
         $this->resetErrorBag();
         $this->resetValidation();
@@ -214,12 +86,6 @@ class Subjects extends Component
             $this->selected_id  = $selected_id;
             $this->getItemById();
             
-        }
-
-        if (empty($this->courses)) {
-
-            $this->prepareCourses(null, null);
-
         }
         
         $this->dsOpenModal($this->modal_target);
@@ -257,9 +123,7 @@ class Subjects extends Component
         $this->dsSelectSelected('is_active', $item->is_active);
 
     }
-    /**
-     * validar con maestros si estan en un semestre ejemplo 1ro D
-     */
+   
     public function saveItem()
     {      
 
@@ -333,6 +197,45 @@ class Subjects extends Component
 
         }
 
+    }
+
+    public function generateSelectOrMultiselect($isDisabled, $isSearchable, $wireModel, $tagComponent)
+    {
+
+        $contentComponent = (object)[
+            'isDisabled'        => $isDisabled,
+            'isSearchable'      => $isSearchable,
+            'wireModel'         => $wireModel,
+            'tagComponent'      => $tagComponent
+        ];
+
+        $contentOnDiv     =  ___csSelectOrMultiselect___($contentComponent);
+        $this->dsDivChangeContent('Careers', $contentOnDiv);
+
+    }
+
+    public function subjectTypeSelected($status)
+    {
+        // ************************************************************************ //
+        // **? Se obtiene el tipo de materia seleccionada, para esta sección de ?** //
+        // **? los tipos de materias estan en el archivo Helper.php, como refe- ?** //
+        // **? rencia los valores:                                              ?** //
+        // **!      id: 1 = Currículum fundamental                              !** //             
+        // **!      id: 2 = Currículum laboral                                  !** //
+        // TODO: Cuando es curriculum fundamental, la materia está disponible - *** //
+        // TODO: para un mismo grado, con la opción de varias carreras, en caso *** //
+        // TODO: para el curículum laraboral, es únicamente para una carrera en *** //
+        // TODO: un mismo grado, las materias son para un solo grado.           *** //
+        // ************************************************************************ // 
+
+        $this->dsSelectSelectedDynamic('career_id', null);
+
+        $this->career_id        = null;
+        $subjectTypeSelected    = (int) $this->subject_type_id;
+        $tagComponent           = ($subjectTypeSelected == 1) ? 'multiple' : '';  
+        $this->generateSelectOrMultiselect(false, true, 'career_id', $tagComponent);      
+        $this->dsSelectOptionsDynamic('career_id', $this->list_careers);
+        
     }
     
     public function render()

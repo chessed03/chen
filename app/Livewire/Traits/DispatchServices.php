@@ -5,9 +5,11 @@ namespace App\Livewire\Traits;
 trait DispatchServices
 {
     
-    /**
-     * Dispatch event to listener on global.js file.
-     */
+    // ********************************************************************* //
+    // **! Eventos que despachan a funciones que escuchan en el archivo-  !** //
+    // **! global.js, las funciones ejecutan el dispacht() en la funcion !** //
+    // **! eventDispatch(), que posee el evento ->dispatch().            !** //
+    // ********************************************************************* //
       
     /** 
      * @param string $type
@@ -147,6 +149,13 @@ trait DispatchServices
         }
 
         $this->eventDispatch('selectSelectedDynamic', $target, $content);
+
+    }
+
+    public function dsDivChangeContent($target, $content)
+    {
+
+        $this->eventDispatch('divChangeContent', $target, $content);
 
     }
 

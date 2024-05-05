@@ -3,6 +3,7 @@
 namespace App\Models\Subject;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\School\Degree\DegreeReference;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\School\Degree\Degree;
 use App\Models\Career\Career;
@@ -200,15 +201,13 @@ class Subject extends Model
 
     }
 
-    public static function getDegrees()
+    public static function getDegreeReference()
     {
-        
-        return Degree::getSelfItems();
-
+        return DegreeReference::getItems();
     }
 
     public static function getCareers()
     {
-        return Career::getCareers();
+        return Career::getItems();
     }
 }

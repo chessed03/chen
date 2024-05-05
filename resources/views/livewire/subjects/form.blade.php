@@ -11,7 +11,7 @@
     
     <div class="row">
         
-        <div class="col-md-12">
+        <div class="col-md-8">
             <x-input-form 
                 label-component="Nombre de la materia *"
                 input-type="text"
@@ -21,58 +21,37 @@
             />
         </div>
 
-        @foreach ($courses as $index => $course)
-            
-            <div class="col-md-4">
-                <x-select 
-                    label-component="Grado *"
-                    :is-searchable="false"
-                    :list-items="$list_degrees"
-                    wire-model="courses.{{ $index }}.degree_id"
-                    :is-change="false"
-                    :is-key="false"
-                />
-            </div>
+        <div class="col-md-4">
+            <x-select 
+                label-component="Tipo de materia *"
+                :is-searchable="false"
+                :list-items="$list_subject_type"
+                wire-model="subject_type_id"
+                :is-disabled="false"
+                :is-change="true"
+                wire-change="subjectTypeSelected(true)"
+                :is-key="false"
+            />
+        </div>
 
-            <div class="col-md-4">
-                <x-select 
-                    label-component="Carrera *"
-                    :is-searchable="false"
-                    :list-items="$list_careers"
-                    wire-model="courses.{{ $index }}.career_id"
-                    :is-change="false"
-                    :is-key="false"
-                />
-            </div>
+        <div class="col-md-2">
+            <x-select 
+                label-component="Referencia de grado *"
+                :is-searchable="false"
+                :list-items="$list_degree_references"
+                wire-model="degree_reference_id"
+                :is-disabled="false"
+                :is-change="false"
+                :is-key="false"
+            />
+        </div>
 
-            <div class="col-md-2">
-                <label for="">&nbsp;</label>
-                <br>
-                <button
-                    @if (!$loop->last) @disabled(true) @endif
-                    type="button"
-                    class="btn btn-success waves-effect waves-light float-right"
-                    wire:click="addRow({{ $index }})"
-                >
-                    <i class="fe-plus mr-2"></i>
-                    Agregar fila
-                </button>
+        <div class="col-md-7">
+            <div class="form-group" wire:ignore>
+                <label class="control-label mb-1">Carreras *</label>
+                <div id="divChangeContentCareers"></div>
             </div>
-
-            <div class="col-md-2">
-                <label for="">&nbsp;</label>
-                <br>
-                <button
-                    type="button"
-                    class="btn btn-danger waves-effect waves-light float-right"
-                    wire:click="deleteRow({{ $index }})"
-                >
-                    <i class="fe-minus mr-2"></i>
-                    Eliminar fila
-                </button>
-            </div>
-
-        @endforeach
+        </div>
 
         <div class="col-3" {{ $update_mode ? '' : 'hidden' }}>
             

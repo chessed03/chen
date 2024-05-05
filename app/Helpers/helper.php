@@ -124,11 +124,11 @@ function ___getSubjectTypes__()
     $result = (object)[
         (object)[
             'id'    => 2,
-            'name'  => 'Currículum Laboral'
+            'name'  => 'Currículum laboral'
         ],
         (object)[
             'id'    => 1,
-            'name'  => 'Currículum Fundamental'
+            'name'  => 'Currículum fundamental'
         ],
     ];
     

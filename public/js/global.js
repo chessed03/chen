@@ -1,7 +1,10 @@
 $wire.on('fnExecListener', (e) => {    
    
     let fnExec  = e.function;
-    let evExec  = JSON.stringify(e);
+    let evExec  = JSON.stringify({
+        'target'    : e.target,
+        'content'   : e.content
+    });    
 
     setTimeout(() => {
         
@@ -89,7 +92,7 @@ const selectRefresh = (select) => {
 
 const selectSelected = (e) => {
 
-    let selectTarget    = $('#' + e.target);
+    let selectTarget    = $(`#${ e.target }`);
     let optionsSelected = e.content;
     
     if (optionsSelected) {
@@ -113,7 +116,7 @@ const selectSelected = (e) => {
 
 const selectOptions = (e) => {
 
-    let selectTarget    = $('#' + e.target);
+    let selectTarget    = $(`#${ e.target }`);
     let listItems       = e.content;
     let options         = ``;
     
@@ -132,7 +135,7 @@ const selectOptions = (e) => {
 
 const selectSelectedDynamic = (e) => {
 
-    let selectTarget    = $('#' + e.target);
+    let selectTarget    = $(`#${ e.target }`); 
     let optionsSelected = e.content;
     
     if (optionsSelected.length != 0) {
@@ -157,10 +160,10 @@ const selectSelectedDynamic = (e) => {
 
 const selectOptionsDynamic = (e) => {
 
-    let selectTarget    = $('#' + e.target);
+    let selectTarget    = $(`#${ e.target }`);
     let listItems       = e.content;
     let options         = ``;
-    console.log('here');
+    
     listItems.forEach( item => {
        
         options += `<option value="${ item.id }">${ item.name }</option>`;
@@ -170,5 +173,17 @@ const selectOptionsDynamic = (e) => {
     selectTarget.html(options);
 
     selectRefresh(selectTarget);
+
+}
+
+const divChangeContent = (e) => {
+    
+    let divName     = 'divChangeContent';
+    let divTarget   = $(`#${ divName }${ e.target }`);
+    
+    divTarget.empty();
+    divTarget.html(e.content);
+
+    initSelectpicker();
 
 }
