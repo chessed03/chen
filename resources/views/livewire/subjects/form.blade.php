@@ -25,7 +25,7 @@
             <x-select 
                 label-component="Tipo de materia *"
                 :is-searchable="false"
-                :list-items="$list_subject_type"
+                :list-items="$list_subject_types"
                 wire-model="subject_type_id"
                 :is-disabled="false"
                 :is-change="true"
@@ -46,13 +46,30 @@
             />
         </div>
 
-        <div class="col-md-7">
-            <div class="form-group" wire:ignore>
-                <label class="control-label mb-1">Carreras *</label>
-                <div id="divChangeContentCareers"></div>
-            </div>
+        <div class="col-md-7" {{ $is_multiselect ? '' : 'hidden' }}> 
+            <x-multiselect
+                label-component="Carreras all *"
+                :is-searchable="true"
+                :list-items="$list_careers"
+                wire-model="temp_careers"
+                :is-disabled="false"
+                :is-change="false"
+                :is-key="false"
+            />
         </div>
 
+        <div class="col-md-7" {{ $is_multiselect ? 'hidden' : '' }}>
+            <x-select
+                label-component="Carreras one *"
+                :is-searchable="true"
+                :list-items="$list_careers"
+                wire-model="temp_career"
+                :is-disabled="false"
+                :is-change="false"
+                :is-key="false"
+            />
+        </div>
+    
         <div class="col-3" {{ $update_mode ? '' : 'hidden' }}>
             
             <x-select-status-item :label-component="'Estado *'" :wire-model="'is_active'" />

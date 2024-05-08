@@ -152,10 +152,10 @@ trait DispatchServices
 
     }
 
-    public function dsDivChangeContent($target, $content)
+    public function dsXChangeContent($target, $content)
     {
 
-        $this->eventDispatch('divChangeContent', $target, $content);
+        $this->eventDispatch('xChangeContent', $target, $content);
 
     }
 

@@ -16,16 +16,18 @@ class Subjects extends Component
     protected $paginationTheme  = 'bootstrap';
 
     protected $listeners        = ['disabledItem'];
-    
+    //**! Variables to needs into component **************
     public $paginate_number     = 5;
 
     public $order_by            = 3;
 
     public $courses             = [];
-
+    
     public $action_loader, $headers_table, $modal_title,  $modal_warnings, $modal_target, $key_word, $selected_id, $update_mode;
-
-    public $subject_type_id, $degree_reference_id, $career_id, $name, $is_active, $list_degree_references, $list_subject_type, $list_careers;
+    //**? Variables to needs into table model ************
+    public $subject_type_id, $degree_reference_id, $careers, $name, $is_active;
+    //**! Variables to custom into component *************
+    public  $list_degree_references, $list_subject_types, $list_careers, $temp_careers, $temp_career, $is_multiselect;
 
     public function mount()
     {
@@ -43,12 +45,31 @@ class Subjects extends Component
             'Los campos marcados con (*) son obligatorios',
         ]; 
 
-        $this->list_subject_type        = ___getSubjectTypes__();
+        $this->list_subject_types       = ___getSubjectTypes__();
         
         $this->list_degree_references   = Subject::getDegreeReference();
 
         $this->list_careers             = Subject::getCareers();
 
+    }
+
+    public function validateData()
+    {
+    
+        $rules = [
+            'degree_reference_id'   => 'required',
+            'subject_type_id'       => 'required',
+            'name'                  => 'required',
+            'temp_careers'          => ($this->is_multiselect) ? 'required' : '',
+            'temp_career'           => (!$this->is_multiselect) ? 'required' : '',
+            'is_active'             => ($this->update_mode) ? 'required' : ''
+        ];
+
+        $messages = [
+            'required' => 'El campo es requerido.',
+        ];  
+
+        $this->validate($rules, $messages);
     }
 
     private function resetFieldsAndHydrate()
@@ -57,15 +78,16 @@ class Subjects extends Component
         $this->selected_id          = null;
         $this->subject_type_id      = null;
         $this->degree_reference_id  = null;
-        $this->career_id            = null;
+        $this->temp_careers         = null;
+        $this->temp_career          = null;
         $this->name                 = null;
         $this->is_active            = null;
         $this->update_mode          = false;
 
-        $this->generateSelectOrMultiselect(true, true, 'career_id', null);
         $this->dsSelectSelected('subject_type_id', null);
         $this->dsSelectSelected('degree_reference_id', null);
-        $this->dsSelectSelected('career_id', null);
+        $this->dsSelectSelected('temp_careers', null);
+        $this->dsSelectSelected('temp_career', null);
         $this->dsSelectSelected('is_active', null);
         $this->resetErrorBag();
         $this->resetValidation();
@@ -103,23 +125,20 @@ class Subjects extends Component
     public function getItemById()
     {
         
-        $item               = Subject::getItemById($this->selected_id);
-        $this->name         = $item->name;
-
-        foreach ($item->courses as $key => $course) {
-
-            $degree_value   = $course["degree_id"];
-            $career_value   = $course["career_id"];
-            $degree_id      = "courses_{$key}_degree_id";
-            $career_id      = "courses_{$key}_career_id";
-
-            $this->prepareCourses($degree_value, $career_value);
-            $this->dsSelectSelected($degree_id, $degree_value);
-            $this->dsSelectSelected($career_id, $career_value);
-
+        $item                       = Subject::getItemById($this->selected_id);
+        $this->subject_type_id      = $item->subject_type_id;
+        $this->degree_reference_id  = $item->degree_reference_id;
+        if (count($item->careers) > 1) {
+            $this->temp_careers = $item->careers;
+        } else {
+            $this->temp_career  = $item->careers;
         }
-        
-        $this->is_active    = $item->is_active;
+        $this->name                 = $item->name;        
+        $this->is_active            = $item->is_active;
+        $this->dsSelectSelected('subject_type_id', $this->subject_type_id);
+        $this->dsSelectSelected('degree_reference_id', $this->degree_reference_id);
+        $this->dsSelectSelected('temp_careers', $this->temp_careers);
+        $this->dsSelectSelected('temp_career', $this->temp_career);
         $this->dsSelectSelected('is_active', $item->is_active);
 
     }
@@ -130,11 +149,13 @@ class Subjects extends Component
         $this->validateData();
 
         $data = (object)[
-            'selected_id'   => $this->selected_id,
-            'name'          => $this->name,
-            'courses'       => $this->courses,
-            'is_active'     => $this->is_active,
-            'update_mode'   => $this->update_mode
+            'selected_id'           => $this->selected_id,
+            'subject_type_id'       => $this->subject_type_id,
+            'degree_reference_id'   => $this->degree_reference_id,
+            'careers'               => ($this->is_multiselect) ? $this->temp_careers : [$this->temp_career],
+            'name'                  => $this->name,
+            'is_active'             => $this->is_active,
+            'update_mode'           => $this->update_mode
         ];
         
         $result = Subject::saveItem($data);
@@ -199,21 +220,6 @@ class Subjects extends Component
 
     }
 
-    public function generateSelectOrMultiselect($isDisabled, $isSearchable, $wireModel, $tagComponent)
-    {
-
-        $contentComponent = (object)[
-            'isDisabled'        => $isDisabled,
-            'isSearchable'      => $isSearchable,
-            'wireModel'         => $wireModel,
-            'tagComponent'      => $tagComponent
-        ];
-
-        $contentOnDiv     =  ___csSelectOrMultiselect___($contentComponent);
-        $this->dsDivChangeContent('Careers', $contentOnDiv);
-
-    }
-
     public function subjectTypeSelected($status)
     {
         // ************************************************************************ //
@@ -228,19 +234,16 @@ class Subjects extends Component
         // TODO: un mismo grado, las materias son para un solo grado.           *** //
         // ************************************************************************ // 
 
-        $this->dsSelectSelectedDynamic('career_id', null);
-
-        $this->career_id        = null;
-        $subjectTypeSelected    = (int) $this->subject_type_id;
-        $tagComponent           = ($subjectTypeSelected == 1) ? 'multiple' : '';  
-        $this->generateSelectOrMultiselect(false, true, 'career_id', $tagComponent);      
-        $this->dsSelectOptionsDynamic('career_id', $this->list_careers);
+        
+        $this->careers          = null;
+        $this->temp_careers     = null;
+        $this->temp_career      = null;
+        $this->is_multiselect   = (((int) $this->subject_type_id) == 1) ? true : false;
         
     }
     
     public function render()
     {
-
         $key_word           = '%' . $this->key_word . '%';
 
         $paginate_number    = $this->paginate_number;

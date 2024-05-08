@@ -14,6 +14,8 @@ $wire.on('fnExecListener', (e) => {
 
 });
 
+const xContent  = 'x-content-change';
+
 const initClockpicker = () => {
         
     $('.clockpicker').clockpicker();
@@ -45,7 +47,7 @@ const toastMessage = (e) => {
     Swal.fire({
         type                : msg.type,
         title               : msg.title,
-        html                : `<b>${msg.text}</b>`,
+        html                : `<b>${ msg.text }</b>`,
         showConfirmButton   : false,
         timer               : 3000,
         toast               : true,
@@ -176,14 +178,26 @@ const selectOptionsDynamic = (e) => {
 
 }
 
-const divChangeContent = (e) => {
-    
-    let divName     = 'divChangeContent';
-    let divTarget   = $(`#${ divName }${ e.target }`);
-    
-    divTarget.empty();
-    divTarget.html(e.content);
+const xChangeContent = (e) => {
 
-    initSelectpicker();
+    //let xTarget   = $(`#${ e.target }`);
+    console.log(e.target);
+    //.attr('multiple', 'multiple');
+
+    // var selectOriginal = $('#career_id');
+    
+    // // Paso 2: Crear un nuevo elemento select multiple
+    // var nuevoSelectMultiple = $('#career_id').attr('multiple', 'multiple');
+    
+    // // Paso 3: Copiar las opciones del select original al nuevo select multiple
+    // selectOriginal.find('option').each(function(){
+    //   nuevoSelectMultiple.append($(this).clone());
+    // });
+    
+    // // Paso 4: Reemplazar el select original con el nuevo select multiple
+    // selectOriginal.replaceWith(nuevoSelectMultiple);
+
+
+    //initSelectpicker();
 
 }

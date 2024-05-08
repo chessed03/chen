@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->smallInteger('subject_type_id');
             $table->foreignId('degree_reference_id')->constrained('degree_references');
-            $table->foreignId('career_id')->constrained('careers')->nullable();
+            $table->json('careers');
             $table->string('name');
             $table->boolean('is_active');
             $table->timestamps();

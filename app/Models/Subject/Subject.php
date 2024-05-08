@@ -15,7 +15,7 @@ class Subject extends Model
     protected $table = 'subjects';
 
     protected $casts = [
-        'courses' => 'json',
+        'careers' => 'json',
     ];
 
     const ENABLED    = 1;
@@ -100,10 +100,12 @@ class Subject extends Model
     public static function createItem($data, $result)
     {
        
-        $item               = new self();
-        $item->name         = $data->name;
-        $item->courses      = $data->courses;
-        $item->is_active    = self::ENABLED;
+        $item                       = new self();
+        $item->subject_type_id      = $data->subject_type_id;
+        $item->degree_reference_id  = $data->degree_reference_id;
+        $item->careers              = $data->careers;
+        $item->name                 = $data->name;
+        $item->is_active            = self::ENABLED;
 
         if( $item->save() ) {
 
