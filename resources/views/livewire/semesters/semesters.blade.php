@@ -62,6 +62,20 @@
                                               
                         </div>
 
+                        <div class="col-md-4">
+
+                            <x-select 
+                                label-component="Carrera"
+                                :is-searchable="false"
+                                :list-items="$list_careers"
+                                wire-model="selected_career_id"
+                                :is-disabled="false"
+                                :is-change="false"
+                                :is-key="false"
+                            />
+                                              
+                        </div>
+
                     </div>
 
                 </div>
@@ -93,6 +107,7 @@
                         <td class="text-center">
                             {{ $item->group->name }}
                         </td>
+                        <td>{{ ___getCareersNames___($item->careers) }}</td>
                         <td class="text-center">
                             
                             <x-status-item :is-active="$item->is_active" />

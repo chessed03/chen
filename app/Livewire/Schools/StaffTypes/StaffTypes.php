@@ -41,7 +41,7 @@ class StaffTypes extends Component
             'Los campos marcados con (*) son obligatorios',
         ];
 
-        $this->list_priorities  = ___getPriorities__();
+        $this->list_priorities  = ___getPriorities___();
 
     }
 

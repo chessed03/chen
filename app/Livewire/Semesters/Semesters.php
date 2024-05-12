@@ -16,24 +16,27 @@ class Semesters extends Component
     protected $paginationTheme  = 'bootstrap';
 
     protected $listeners        = ['disabledItem'];
-    
+    //**! Variables to needs into component **************    
     public $paginate_number     = 5;
 
     public $order_by            = 3;
 
-    public $action_loader, $headers_table, $modal_title,  $modal_warnings, $modal_target, $key_word, $selected_degree_id, $selected_group_id, $selected_id, $update_mode;
-
-    public $degree_id, $group_id, $careers, $name, $is_active, $list_degrees, $list_groups, $list_shifts;
+    public $action_loader, $headers_table, $modal_title,  $modal_warnings, $modal_target, $key_word, $selected_id, $update_mode;
+    //**? Variables to needs into table model ************
+    public $degree_id, $group_id, $careers, $name, $is_active;
+    //*** Variables to custom into component *************
+    public $list_degrees, $list_groups, $list_careers, $selected_degree_id, $selected_group_id, $selected_career_id, $careers_by_degree_id;
 
     public function mount()
     {
 
-        $this->action_loader    = "paginate_number, order_by, key_word, selected_degree_id, selected_group_id, clearFilters";
+        $this->action_loader    = "paginate_number, order_by, key_word, selected_degree_id, selected_group_id, selected_career_id, clearFilters";
 
         $this->headers_table    = [
-            (object)['name' => 'Nombre del semestre', 'class' => '', 'width' => '40%'],
-            (object)['name' => 'Grado', 'class' => '', 'width' => '15%'],
+            (object)['name' => 'Nombre', 'class' => '', 'width' => '20%'],
+            (object)['name' => 'Grado', 'class' => '', 'width' => '10%'],
             (object)['name' => 'Grupo', 'class' => 'text-center', 'width' => '15%'],
+            (object)['name' => 'Carreras', 'class' => '', 'width' => '25%'],
             (object)['name' => 'Estado', 'class' => 'text-center', 'width' => '15%'],
             (object)['name' => 'Acciones', 'class' => 'text-right', 'width' => '15%']
         ];
@@ -45,8 +48,10 @@ class Semesters extends Component
             'El nombre del semestre se genera en automático',
         ];
 
-        $this->list_degrees     = Semester::getDegrees();
-        $this->list_groups      = Semester::getGroups();
+        $this->list_degrees = Semester::getDegrees();
+        $this->list_groups  = Semester::getGroups();
+        $this->list_careers = Semester::getCareers();
+        $this->careers      = [];
 
     }
 
@@ -76,15 +81,16 @@ class Semesters extends Component
 
     private function resetFieldsAndHydrate()
     {
-        $this->selected_id  = null;
-        $this->degree_id    = null;
-        $this->group_id     = null;
-        $this->careers      = null;
-        $this->name         = null;
-        $this->is_active    = null;
-        $this->update_mode  = false;
+        $this->selected_id          = null;
+        $this->degree_id            = null;
+        $this->group_id             = null;
+        $this->careers              = null;
+        $this->name                 = null;
+        $this->is_active            = null;
+        $this->update_mode          = false;
 
         $this->dsSelectSelectedDynamic('careers', null);
+        $this->dsSelectOptionsDynamic('careers', null);
         $this->dsSelectSelected('degree_id', null);
         $this->dsSelectSelected('group_id', null);
         $this->dsSelectSelected('is_active', null);
@@ -134,15 +140,15 @@ class Semesters extends Component
         
         $this->dsSelectSelected('degree_id', $item->degree_id);
         $this->degreeSelected(false);
-        $this->dsSelectSelectedDynamic('careers', $this->careers);
+        $this->dsSelectSelectedDynamic('careers', $item->careers);
         $this->dsSelectSelected('group_id', $item->group_id);
         $this->dsSelectSelected('is_active', $item->is_active);
-        
+       
 
     }
 
     public function saveItem()
-    {      
+    {   
         $this->validateData();
 
         $data = (object)[
@@ -220,9 +226,13 @@ class Semesters extends Component
     public function degreeSelected($status)
     {
         
-        $degree             = $this->list_degrees->find($this->degree_id);
-        $list_careers       = Semester::getCareersByShiftId($degree->shift_id);
-        $this->dsSelectOptionsDynamic('careers', $list_careers);
+        //**! No se usa ($this->careers) o mas bien, alguna variable livewire, ya que al ser un select !**//
+        //**! no necesita alguna variable de este tipo, lo que está realizando es llevar la lista de - !**//
+        //**! carreras con JS (Pasando el array a traves de una función en JS) de manera dinámica.     !**//
+
+        $degree     = $this->list_degrees->find($this->degree_id);
+        $careers    = Semester::getCareersByShiftId($degree->shift_id);
+        $this->dsSelectOptionsDynamic('careers', $careers);
 
         if ($status) {
             $this->generateName();
@@ -246,8 +256,10 @@ class Semesters extends Component
 
         $this->selected_degree_id   = null;
         $this->selected_group_id    = null;
+        $this->selected_career_id   = null;
         $this->dsSelectSelected('selected_degree_id', null);
         $this->dsSelectSelected('selected_group_id', null);
+        $this->dsSelectSelected('selected_career_id', null);
 
     }
 
@@ -264,7 +276,9 @@ class Semesters extends Component
 
         $group_id           = $this->selected_group_id;
 
-        $listModule         = Semester::getSelfItems($key_word, $paginate_number, $order_by, $degree_id, $group_id);
+        $career_id          = $this->selected_career_id;
+
+        $listModule         = Semester::getSelfItems($key_word, $paginate_number, $order_by, $degree_id, $group_id, $career_id);
         
         $this->setPage(1);
 

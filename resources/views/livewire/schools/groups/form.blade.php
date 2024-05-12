@@ -11,7 +11,7 @@
 
     <div class="row">
 
-        <div class="col-md-6">
+        <div class="col-md-9">
             <x-input-form 
                 label-component="Nombre del grupo *"
                 input-type="text"
@@ -19,9 +19,7 @@
                 :readonly="false"
                 :disabled="false"
             />
-        </div>                    
-        
-        <div class="col-md-3"></div>
+        </div>
 
         <div class="col-md-3" {{ $update_mode ? '' : 'hidden' }}>
             

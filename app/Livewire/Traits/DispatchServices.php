@@ -122,19 +122,17 @@ trait DispatchServices
     public function dsSelectSelected($target, $content)
     {
 
-        if (!is_array($content)) {
-            
-            $content = [$content];
-
-        }
-
+        $content = $this->guardContentArray($content);
+        
         $this->eventDispatch('selectSelected', $target, $content);
 
     }
 
     public function dsSelectOptionsDynamic($target, $content)
     {
-      
+        
+        $content = $this->guardContentArray($content);
+        
         $this->eventDispatch('selectOptionsDynamic', $target, $content);
 
     }
@@ -142,21 +140,24 @@ trait DispatchServices
     public function dsSelectSelectedDynamic($target, $content)
     {
 
-        if (!is_array($content)) {
-            
-            $content = [];
-
-        }
+        $content = $this->guardContentArray($content);
 
         $this->eventDispatch('selectSelectedDynamic', $target, $content);
 
     }
-
-    public function dsXChangeContent($target, $content)
+   
+    public function guardContentArray($content)
     {
 
-        $this->eventDispatch('xChangeContent', $target, $content);
+        if (is_null($content)) {
+            
+            $content = [];
 
+        } 
+
+        $content = collect($content)->toArray();
+           
+        return $content;
     }
 
     public function eventDispatch($function, $target, $content)

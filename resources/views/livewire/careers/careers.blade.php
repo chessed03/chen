@@ -51,7 +51,7 @@
                     <tr>
                         <td>{{ $item->name }}</td>
                         <td class="text-center">
-                            {{ ___getShiftsNames__($item->shifts) }}
+                            {{ ___getShiftsNames___($item->shifts) }}
                         </td>
                         <td class="text-center">
                             

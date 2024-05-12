@@ -20,13 +20,11 @@ class Subjects extends Component
     public $paginate_number     = 5;
 
     public $order_by            = 3;
-
-    public $courses             = [];
     
     public $action_loader, $headers_table, $modal_title,  $modal_warnings, $modal_target, $key_word, $selected_id, $update_mode;
     //**? Variables to needs into table model ************
     public $subject_type_id, $degree_reference_id, $careers, $name, $is_active;
-    //**! Variables to custom into component *************
+    //*** Variables to custom into component *************
     public  $list_degree_references, $list_subject_types, $list_careers, $temp_careers, $temp_career, $is_multiselect;
 
     public function mount()
@@ -35,9 +33,11 @@ class Subjects extends Component
         $this->action_loader    = "paginate_number, order_by, key_word";
 
         $this->headers_table    = [
-            (object)['name' => 'Nombre', 'class' => '', 'width' => '35%'],
-            (object)['name' => 'Cursos', 'class' => '', 'width' => '40%'],
-            (object)['name' => 'Estado', 'class' => 'text-center', 'width' => '10%'],
+            (object)['name' => 'Nombre', 'class' => '', 'width' => '20%'],
+            (object)['name' => 'Tipo de materia', 'class' => 'text-center', 'width' => '20%'],
+            (object)['name' => 'Referencia de grado', 'class' => 'text-center', 'width' => '15%'],
+            (object)['name' => 'Carreras', 'class' => 'text-center', 'width' => '15%'],
+            (object)['name' => 'Estado', 'class' => 'text-center', 'width' => '15%'],
             (object)['name' => 'Acciones', 'class' => 'text-right', 'width' => '15%']
         ];
 
@@ -45,7 +45,7 @@ class Subjects extends Component
             'Los campos marcados con (*) son obligatorios',
         ]; 
 
-        $this->list_subject_types       = ___getSubjectTypes__();
+        $this->list_subject_types       = ___getSubjectTypes___();
         
         $this->list_degree_references   = Subject::getDegreeReference();
 

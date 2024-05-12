@@ -139,23 +139,13 @@ const selectSelectedDynamic = (e) => {
 
     let selectTarget    = $(`#${ e.target }`); 
     let optionsSelected = e.content;
-    
-    if (optionsSelected.length != 0) {
-
-        optionsSelected.forEach( val => {
-            
-            selectTarget.find(`option[value="${ val }"]`).prop('selected', true);
-    
-        });
+   
+    optionsSelected.forEach( val => {
         
+        selectTarget.find(`option[value="${ val }"]`).prop('selected', true);
 
-    } else {
-
-        selectTarget.val('');
-
-        selectOptionsDynamic(e);
-    }
-    
+    });
+        
     selectRefresh(selectTarget);
 
 }
@@ -167,7 +157,7 @@ const selectOptionsDynamic = (e) => {
     let options         = ``;
     
     listItems.forEach( item => {
-       
+    
         options += `<option value="${ item.id }">${ item.name }</option>`;
 
     });
@@ -175,29 +165,5 @@ const selectOptionsDynamic = (e) => {
     selectTarget.html(options);
 
     selectRefresh(selectTarget);
-
-}
-
-const xChangeContent = (e) => {
-
-    //let xTarget   = $(`#${ e.target }`);
-    console.log(e.target);
-    //.attr('multiple', 'multiple');
-
-    // var selectOriginal = $('#career_id');
-    
-    // // Paso 2: Crear un nuevo elemento select multiple
-    // var nuevoSelectMultiple = $('#career_id').attr('multiple', 'multiple');
-    
-    // // Paso 3: Copiar las opciones del select original al nuevo select multiple
-    // selectOriginal.find('option').each(function(){
-    //   nuevoSelectMultiple.append($(this).clone());
-    // });
-    
-    // // Paso 4: Reemplazar el select original con el nuevo select multiple
-    // selectOriginal.replaceWith(nuevoSelectMultiple);
-
-
-    //initSelectpicker();
 
 }

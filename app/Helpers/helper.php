@@ -1,8 +1,11 @@
 <?php
 
 use App\Models\School\Shift\Shift;
+use App\Models\Career\Career;
 
-function __getMenuSidebar__(){
+//** Generate custom arrays **/
+
+function ___getMenuSidebar___(){
 
     $result = (object)[
         (object)[
@@ -82,7 +85,6 @@ function __getMenuSidebar__(){
 
 }
 
-
 function ___getIsTeacher___()
 {
     $result = (object)[
@@ -99,7 +101,7 @@ function ___getIsTeacher___()
     return collect($result);
 }
 
-function ___getPriorities__()
+function ___getPriorities___()
 {
     $result = (object)[
         (object)[
@@ -119,7 +121,7 @@ function ___getPriorities__()
     return collect($result);
 }
 
-function ___getSubjectTypes__()
+function ___getSubjectTypes___()
 {
     $result = (object)[
         (object)[
@@ -135,31 +137,7 @@ function ___getSubjectTypes__()
     return collect($result);
 }
 
-function ___getPrioritiesNames__($priority_id)
-{
-    $arrayValidate = is_array($priority_id);
-    $result = '';
-
-    if ($arrayValidate) {
-        $itemsCollection    = ___getPriorities__();
-        $result             = ___getItemNames___($priority_id, $itemsCollection);
-    }
-
-    return $result;
-}
-
-function ___getShiftsNames__($shifts)
-{
-    $arrayValidate = is_array($shifts);
-    $result = '';
-
-    if ($arrayValidate) {
-        $itemsCollection    = Shift::find($shifts);
-        $result             = ___getItemNames___($shifts, $itemsCollection);
-    }
-
-    return $result;
-}
+//** Generate names of custom arrays **/
 
 function ___getItemNames___($items, $itemsCollection)
 {
@@ -186,4 +164,60 @@ function ___getItemNames___($items, $itemsCollection)
     }
 
     return $result;
+}
+
+function ___getPrioritiesNames___($priority_id)
+{
+    $arrayValidate = is_array($priority_id);
+    $result = '';
+
+    if ($arrayValidate) {
+        $itemsCollection    = ___getPriorities___();
+        $result             = ___getItemNames___($priority_id, $itemsCollection);
+    }
+
+    return $result;
+}
+
+function ___getShiftsNames___($shifts)
+{
+    $arrayValidate = is_array($shifts);
+    $result = '';
+
+    if ($arrayValidate) {
+        $itemsCollection    = Shift::find($shifts);
+        $result             = ___getItemNames___($shifts, $itemsCollection);
+    }
+
+    return $result;
+}
+
+function ___getTypeSubjectsNames___($typeSubjects)
+{
+
+    $arrayValidate = is_array($typeSubjects);
+    $result = '';
+
+    if ($arrayValidate) {
+        $itemsCollection    = ___getSubjectTypes___();
+        $result             = ___getItemNames___($typeSubjects, $itemsCollection);
+    }
+
+    return $result;
+
+}
+
+function ___getCareersNames___($careers)
+{
+
+    $arrayValidate = is_array($careers);
+    $result = '';
+
+    if ($arrayValidate) {
+        $itemsCollection    = Career::find($careers);
+        $result             = ___getItemNames___($careers, $itemsCollection);
+    }
+
+    return $result;
+
 }

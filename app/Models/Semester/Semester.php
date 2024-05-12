@@ -32,16 +32,12 @@ class Semester extends Model
     {
         return $this->belongsTo(Group::class);
     }
-
-    public function career()
-    {
-        return $this->belongsTo(Career::class);
-    }
-
-    public static function getSelfItems($key_word, $paginate_number, $order_by, $degree_id, $group_id)
+    
+    public static function getSelfItems($key_word, $paginate_number, $order_by, $degree_id, $group_id, $career_id)
     {
 
         $query = self::query()
+            ->where('name', 'LIKE', '%' . $key_word . '%')
             ->where('is_active', self::ENABLED);      
 
         if ($degree_id) {
@@ -53,6 +49,12 @@ class Semester extends Model
         if ($group_id) {
 
             $query->where('group_id', $group_id);
+
+        }
+
+        if ($career_id) {
+
+            $query->whereJsonContains('careers', $career_id);
 
         }
 
@@ -344,6 +346,11 @@ class Semester extends Model
         
         return Group::getItems();
 
+    }
+
+    public static function getCareers()
+    {
+        return Career::getItems();
     }
     
     public static function getCareersByShiftId($shift_id)

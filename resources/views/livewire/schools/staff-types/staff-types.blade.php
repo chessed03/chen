@@ -31,7 +31,7 @@
                     <tr>
                         <td>{{ $item->name }}</td>
                         <td class="text-center">
-                            {{ ___getPrioritiesNames__([$item->priority_id]) }}
+                            {{ ___getPrioritiesNames___([$item->priority_id]) }}
                         </td>
                         <td class="text-center">
             

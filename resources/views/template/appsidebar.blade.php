@@ -8,7 +8,7 @@
 
                 <li class="menu-title">NAVEGACIÓN
 
-                    @foreach (__getMenuSidebar__() as $menu)
+                    @foreach (___getMenuSidebar___() as $menu)
 
                         @php
                             $mandatoryRoute = "{$menu->menu}.";

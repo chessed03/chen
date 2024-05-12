@@ -30,7 +30,9 @@
 
                     <tr>
                         <td>{{ $item->name }}</td>
-                        <td>{{ json_encode($item->courses) }}</td>
+                        <td class="text-center">{{ ___getTypeSubjectsNames___([$item->subject_type_id]) }}</td>
+                        <td class="text-center">{{ $item->degree_reference_id }}</td>
+                        <td>{{ ___getCareersNames___($item->careers) }}</td>
                         <td class="text-center">
             
                             <x-status-item :is-active="$item->is_active" />
