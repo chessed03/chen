@@ -30,7 +30,7 @@ class Subjects extends Component
     public function mount()
     {
 
-        $this->action_loader    = "paginate_number, order_by, key_word";
+        $this->action_loader    = "paginate_number, order_by, key_word, selected_subject_type_id, selected_degree_reference_id, selected_career_id, clearFilters";
 
         $this->headers_table    = [
             (object)['name' => 'Nombre', 'class' => '', 'width' => '20%'],
@@ -241,16 +241,34 @@ class Subjects extends Component
         $this->is_multiselect   = (((int) $this->subject_type_id) == 1) ? true : false;
         
     }
+
+    public function clearFilters()
+    {   
+        
+        $this->selected_subject_type_id     = null;
+        $this->selected_degree_reference_id = null;
+        $this->selected_career_id           = null;
+        $this->dsSelectSelected('selected_subject_type_id', null);
+        $this->dsSelectSelected('selected_degree_reference_id', null);
+        $this->dsSelectSelected('selected_career_id', null);
+
+    }
     
     public function render()
     {
-        $key_word           = '%' . $this->key_word . '%';
+        $key_word               = '%' . $this->key_word . '%';
 
-        $paginate_number    = $this->paginate_number;
+        $paginate_number        = $this->paginate_number;
 
-        $order_by           = intval($this->order_by);
+        $order_by               = intval($this->order_by);
 
-        $listModule         = Subject::getSelfItems($key_word, $paginate_number, $order_by);
+        $subject_type_id        = $this->selected_subject_type_id;
+
+        $degree_reference_id    = $this->selected_degree_reference_id;
+
+        $career_id              = $this->selected_career_id;
+
+        $listModule             = Subject::getSelfItems($key_word, $paginate_number, $order_by, $subject_type_id, $degree_reference_id, $career_id);
 
         $this->setPage(1);
 

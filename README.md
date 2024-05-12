@@ -5,3 +5,7 @@ Fecha: 23/04/2024
         - Validar el resultado de los filtros.
         - La creación es correcta aunque un tanto confusa.
         - Corregir el editado, no trae el dato Carreras, (select dinamico)
+
+Fecha: 11/05/2024
+    - Verificar la edición de materias
+        - Cuando es un array de 2 elementos, las carreras no se auntoseleccionan (select carreras).

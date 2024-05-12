@@ -51,7 +51,7 @@
                         <div class="col-md-4">
 
                             <x-select 
-                                label-component="Grupo"
+                                label-component="Referencia de grado"
                                 :is-searchable="false"
                                 :list-items="$list_degree_references"
                                 wire-model="selected_degree_reference_id"

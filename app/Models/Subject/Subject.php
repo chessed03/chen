@@ -21,13 +21,31 @@ class Subject extends Model
     const ENABLED    = 1;
 
     const DISABLED   = 2;
-
-    public static function getSelfItems($key_word, $paginate_number, $order_by)
+    
+    public static function getSelfItems($key_word, $paginate_number, $order_by, $subject_type_id, $degree_reference_id, $career_id)
     {
 
         $query = self::query()
             ->where('name', 'LIKE', '%' . $key_word . '%')
             ->where('is_active', '!=', self::DISABLED);
+
+        if ($subject_type_id) {
+
+            $query->where('subject_type_id', $subject_type_id);
+
+        }
+
+        if ($degree_reference_id) {
+
+            $query->where('degree_reference_id', $degree_reference_id);
+
+        }
+
+        if ($career_id) {
+
+            $query->whereJsonContains('careers', $career_id);
+
+        }
 
         switch ($order_by) {
             case 1:
