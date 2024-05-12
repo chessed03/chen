@@ -135,12 +135,14 @@ class Subjects extends Component
         }
         $this->name                 = $item->name;        
         $this->is_active            = $item->is_active;
+        
         $this->dsSelectSelected('subject_type_id', $this->subject_type_id);
         $this->dsSelectSelected('degree_reference_id', $this->degree_reference_id);
         $this->dsSelectSelected('temp_careers', $this->temp_careers);
         $this->dsSelectSelected('temp_career', $this->temp_career);
         $this->dsSelectSelected('is_active', $item->is_active);
-
+        $this->subjectTypeSelected(false);
+        
     }
    
     public function saveItem()
@@ -234,10 +236,12 @@ class Subjects extends Component
         // TODO: un mismo grado, las materias son para un solo grado.           *** //
         // ************************************************************************ // 
 
+        if ($status) {
+            $this->careers      = null;
+            $this->temp_careers = null;
+            $this->temp_career  = null;
+        }
         
-        $this->careers          = null;
-        $this->temp_careers     = null;
-        $this->temp_career      = null;
         $this->is_multiselect   = (((int) $this->subject_type_id) == 1) ? true : false;
         
     }

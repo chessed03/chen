@@ -96,22 +96,13 @@ const selectSelected = (e) => {
 
     let selectTarget    = $(`#${ e.target }`);
     let optionsSelected = e.content;
-    
-    if (optionsSelected) {
 
-        optionsSelected.forEach( val => {
-            
-            selectTarget.find(`option[value="${ val }"]`).prop('selected', true);
-    
-        });
+    optionsSelected.forEach( val => {
         
+        selectTarget.find(`option[value="${ val }"]`).prop('selected', true);
 
-    } else {
+    });
 
-        selectTarget.val('');
-
-    }
-    
     selectRefresh(selectTarget);
 
 }

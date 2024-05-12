@@ -149,12 +149,12 @@ class Subject extends Model
 
         if ($boundItem) {
 
-            $result->find   = $validateItemRelations->find;
+            $result->find       = $validateItemRelations->find;
 
         } else {
 
             $item->name         = $data->name;
-            $item->courses      = $data->courses;
+            $item->careers      = $data->careers;
             $item->is_active    = $data->is_active;
     
             if($item->update()) {

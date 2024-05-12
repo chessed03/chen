@@ -48,7 +48,7 @@
 
         <div class="col-md-7" {{ $is_multiselect ? '' : 'hidden' }}> 
             <x-multiselect
-                label-component="Carreras all *"
+                label-component="Carreras *"
                 :is-searchable="true"
                 :list-items="$list_careers"
                 wire-model="temp_careers"
@@ -60,7 +60,7 @@
 
         <div class="col-md-7" {{ $is_multiselect ? 'hidden' : '' }}>
             <x-select
-                label-component="Carreras one *"
+                label-component="Carrera *"
                 :is-searchable="true"
                 :list-items="$list_careers"
                 wire-model="temp_career"
