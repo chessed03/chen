@@ -86,7 +86,7 @@
                 >
 
                     <x-button-clear-filters 
-                        :disabled="!$selected_degree_id && !$selected_group_id"
+                        :disabled="!$selected_degree_id && !$selected_group_id && !$selected_career_id"
                     />
              
                 </div>

@@ -25,7 +25,7 @@ class Subjects extends Component
     //**? Variables to needs into table model ************
     public $subject_type_id, $degree_reference_id, $careers, $name, $is_active;
     //*** Variables to custom into component *************
-    public  $list_degree_references, $list_subject_types, $list_careers, $temp_careers, $temp_career, $is_multiselect;
+    public  $list_degree_references, $list_subject_types, $list_careers, $temp_careers, $temp_career, $is_multiselect, $selected_subject_type_id, $selected_degree_reference_id, $selected_career_id;
 
     public function mount()
     {

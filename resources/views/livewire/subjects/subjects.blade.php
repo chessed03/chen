@@ -4,18 +4,91 @@
 
         <div class="card-box">
 
-            <div class="row">   
+            <div class="row" x-data="{ openBarFilters: false }">   
                 
-                <div class="col-md-10">
+                <div class="col-md-9">
 
                     <x-bar-filter-paginate-order-key :is-key-word="true" />
 
                 </div>
 
-                <div class="col-md-2 button-list py-3 text-right">
+                <div class="col-md-3 button-list py-3">
 
                     <x-button-create-item />
 
+                    <button
+                        type="button"
+                        x-on:click="openBarFilters =! openBarFilters"
+                        x-bind:class="{'btn-success': !openBarFilters, 'btn-danger': openBarFilters}"
+                        class="btn waves-effect waves-light float-right"
+                    >
+                        <i x-bind:class="{'fe-filter mr-1': !openBarFilters, 'fe-x mr-1': openBarFilters}"></i> 
+                        <span x-text="openBarFilters ? 'Cerrar filtros' : 'Ver filtros'"></span>
+                    </button>
+
+                </div>
+                
+                <div class="col-md-9" 
+                    x-show="openBarFilters"
+                    x-transition.scale.origin.top
+                >
+
+                    <div class="row">
+                        <div class="col-md-4">
+
+                            <x-select 
+                                label-component="Tipo de materia"
+                                :is-searchable="false"
+                                :list-items="$list_subject_types"
+                                wire-model="selected_subject_type_id"
+                                :is-disabled="false"
+                                :is-change="false"
+                                :is-key="false"
+                            />
+                    
+                        </div>
+                        
+                        <div class="col-md-4">
+
+                            <x-select 
+                                label-component="Grupo"
+                                :is-searchable="false"
+                                :list-items="$list_degree_references"
+                                wire-model="selected_degree_reference_id"
+                                :is-disabled="false"
+                                :is-change="false"
+                                :is-key="false"
+                            />
+                                              
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <x-select 
+                                label-component="Carreras"
+                                :is-searchable="false"
+                                :list-items="$list_careers"
+                                wire-model="selected_career_id"
+                                :is-disabled="false"
+                                :is-change="false"
+                                :is-key="false"
+                            />
+                                              
+                        </div>
+
+                    </div>
+
+                </div>
+               
+                <div class="col-md-3 button-list py-3 text-right" 
+                    x-show="openBarFilters"
+                    x-transition.scale.origin.top
+                >
+
+                    <x-button-clear-filters 
+                        :disabled="!$selected_subject_type_id && !$selected_degree_reference_id && !$selected_career_id"
+                    />
+             
                 </div>
                 
             </div>
